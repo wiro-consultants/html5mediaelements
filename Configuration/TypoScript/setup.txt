@@ -29,7 +29,5 @@ page.includeJSFooter.tx_html5mediaelements = EXT:html5mediaelements/Resources/Pu
 
 [globalVar = LIT:1 = {$plugin.tx_html5mediaelements.settings.includeCss}]
 page.includeCSSLibs.tx_html5mediaelements_me = EXT:html5mediaelements/Resources/Public/JavaScript/MediaElement/mediaelementplayer.min.css
-page.includeCSSLibs.tx_html5mediaelements = EXT:html5mediaelements/Resources/Public/Css/html5mediaelements.css
+#page.includeCSSLibs.tx_html5mediaelements = EXT:html5mediaelements/Resources/Public/Css/html5mediaelements.css
 [end]
-
-#module.tx_html5mediaelements =< plugin.tx_html5mediaelements

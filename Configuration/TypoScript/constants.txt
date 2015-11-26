@@ -12,8 +12,13 @@ plugin.tx_html5mediaelements {
 		storagePid =
 	}
 	settings {
+		# Include the built-in jQuery
 		includeJs = 1
+
+		# Include the JavaScript of the plugin
 		includeJquery = 1
+
+		# Include the CSS file of the plugin
 		includeCss = 1
 	}
 }

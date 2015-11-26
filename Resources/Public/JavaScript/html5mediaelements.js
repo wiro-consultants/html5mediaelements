@@ -1,16 +1,19 @@
-(function ($, undefined) {
+(function ($) {
 	"use strict";
 
-	$('.html5mediaelement').each(function () {
-		var $this = $(this),
-			pluginPath = $(this).find('object').attr('data');
+	$(function () {
+		$('.html5mediaelement').each(function () {
+			var $this = $(this),
+				pluginPath = $(this).find('object').attr('data');
 
-		pluginPath = pluginPath.split('/');
-		pluginPath.pop();
-		pluginPath = pluginPath.join('/') + '/';
+			pluginPath = pluginPath.split('/');
+			pluginPath.pop();
+			pluginPath = pluginPath.join('/') + '/';
 
-		$this.mediaelementplayer({
-			pluginPath: pluginPath
+			$this.mediaelementplayer({
+				pluginPath: pluginPath
+			});
 		});
 	});
+
 }(jQuery));

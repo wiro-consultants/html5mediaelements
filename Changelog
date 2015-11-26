@@ -17,3 +17,7 @@
 	  mobile devices
 	* Bugfix in notification function
 	* Ignore workspace records for now
+
+2015-11-25 Simon Praetorius <praetorius@wiro-consultants.de> v2.1.2
+	* Code cleanup
+	* Documentation

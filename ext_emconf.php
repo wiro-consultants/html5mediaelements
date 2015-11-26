@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = array(
 	'title' => 'HTML5 Media Elements',
-	'description' => '',
+	'description' => 'A media plugin that embeds audio and video files using HTML5 tags and Adobe Flash as a fallback. If the command line utilities "ffmpeg" and "ffprobe" are available on the server, a scheduler task can be configured to convert the source files to web-friendly media formats such as mp4, webm and mp3. The goal is to make embedding local media files as easy as uploading a video to YouTube.',
 	'category' => 'plugin',
 	'author' => 'Simon Praetorius',
 	'author_email' => 'praetorius@wiro-consultants.de',
@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'uploadfolder' => '1',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-	'version' => '2.1.1',
+	'version' => '2.1.2',
 	'constraints' => array(
 		'depends' => array(
 			'typo3' => '6.2',
