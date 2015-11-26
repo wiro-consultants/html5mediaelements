@@ -203,6 +203,11 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 			$mediaRecords = $this->mediaRepository->findOptimizeQueue();
 
 			foreach ($mediaRecords as $media) {
+				// Ignore records in workspaces
+				if ($media->getPid() < 0) {
+					continue;
+				}
+
 				// Get configuration for this page
 				$config = $this->getPageTSconfig($media->getPid());
 				$config = $this->validateConfig($config);
@@ -630,14 +635,13 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 	 * @param  \Exception $exception   the exception that was thrown
 	 * @return boolean                 success status of email
 	 */
-	protected function sendNotification($recipients, array $config, object $media, \Exception $exception = NULL) {
+	protected function sendNotification($recipients, array $config, $media, \Exception $exception = NULL) {
 		// Convert comma-separated list to array
 		$recipients = array_map('trim', explode(',', $recipients));
 
 		// Generate markers for the email subject and content
 		$markers = array(
-			'###SIGNATURE###' => $config['signature'],
-			'###BACKEND_URL###' => GeneralUtility::locationHeaderUrl('/typo3/')
+			'###SIGNATURE###' => $config['signature']
 		);
 
 		if (isset($exception)) {

@@ -59,7 +59,7 @@ tx_html5mediaelements {
 				h264 {
 					preset =
 					tune =
-					profile =
+					profile = main
 				}
 			}
 		}
@@ -81,9 +81,7 @@ The following media files have been converted to web-friendly formats:
 
 ###MEDIAFILES###
 
-If you want to embed the converted files, just enter the TYPO3 backend:
-
-###BACKEND_URL###
+If you want to embed the converted files, just enter the TYPO3 backend.
 
 ###SIGNATURE###
 )

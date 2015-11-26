@@ -10,3 +10,10 @@
 	* More flexible output file naming
 	* Error reporting
 	* Success notification
+
+2015-11-11 Simon Praetorius <praetorius@wiro-consultants.de> v2.1.1
+	* Set flash fallback path
+	* Use main profile for h.264 conversion to support older
+	  mobile devices
+	* Bugfix in notification function
+	* Ignore workspace records for now
