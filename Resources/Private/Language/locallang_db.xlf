@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-10-28T18:35:50Z" product-name="html5mediaelements">
+		<header/>
+		<body>
+			<trans-unit id="tx_html5mediaelements_domain_model_media">
+				<source>Media</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.tabs.media">
+				<source>Media</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.source_file">
+				<source>Original File</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_convert">
+				<source>Generate web-friendly media files</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_crop">
+				<source>Crop video automatically</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster">
+				<source>Generate preview image automatically</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster.disabled">
+				<source>Disabled</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster.start">
+				<source>First frame</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster.middle">
+				<source>Middle frame</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster.end">
+				<source>Last frame</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.poster">
+				<source>Preview image</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.is_converted">
+				<source>Is Converted</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.is_cropped">
+				<source>Is Cropped</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.optimized_media">
+				<source>Optimized Media</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized">
+				<source>Media Optimized</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized.optimized_file">
+				<source>Optimized File</source>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized.format">
+				<source>Format</source>
+			</trans-unit>
+
+			<trans-unit id="plugin.mediaelement.name">
+				<source>Media Element</source>
+			</trans-unit>
+			<trans-unit id="plugin.mediaelement.flexform.options">
+				<source>Options</source>
+			</trans-unit>
+			<trans-unit id="plugin.mediaelement.flexform.mediaRecords">
+				<source>Media Records</source>
+			</trans-unit>
+			<trans-unit id="wizicon.mediaelement.title">
+				<source>Media Element</source>
+			</trans-unit>
+			<trans-unit id="wizicon.mediaelement.description">
+				<source>Embeds audio and video files in the page</source>
+			</trans-unit>
+
+			<trans-unit id="formats.video.mp4">
+				<source>mp4 video</source>
+			</trans-unit>
+			<trans-unit id="formats.video.webm">
+				<source>webM video</source>
+			</trans-unit>
+			<trans-unit id="formats.video.ogg">
+				<source>ogg video</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,35 @@
+plugin.tx_html5mediaelements {
+	view {
+		templateRootPaths {
+			1 = {$plugin.tx_html5mediaelements.view.templateRootPath}
+		}
+		partialRootPaths {
+			1 = {$plugin.tx_html5mediaelements.view.partialRootPath}
+		}
+		layoutRootPaths {
+			1 = {$plugin.tx_html5mediaelements.view.layoutRootPath}
+		}
+	}
+	persistence {
+		storagePid = {$plugin.tx_html5mediaelements.persistence.storagePid}
+	}
+	settings {
+
+	}
+}
+
+[globalVar = LIT:1 = {$plugin.tx_html5mediaelements.settings.includeJquery}]
+page.includeJSFooterlibs.tx_html5mediaelements_jquery = EXT:html5mediaelements/Resources/Public/JavaScript/jQuery/jquery.min.js
+[end]
+
+[globalVar = LIT:1 = {$plugin.tx_html5mediaelements.settings.includeJs}]
+page.includeJSFooterlibs.tx_html5mediaelements_me = EXT:html5mediaelements/Resources/Public/JavaScript/MediaElement/mediaelement-and-player.min.js
+page.includeJSFooter.tx_html5mediaelements = EXT:html5mediaelements/Resources/Public/JavaScript/html5mediaelements.js
+[end]
+
+[globalVar = LIT:1 = {$plugin.tx_html5mediaelements.settings.includeCss}]
+page.includeCSSLibs.tx_html5mediaelements_me = EXT:html5mediaelements/Resources/Public/JavaScript/MediaElement/mediaelementplayer.min.css
+page.includeCSSLibs.tx_html5mediaelements = EXT:html5mediaelements/Resources/Public/Css/html5mediaelements.css
+[end]
+
+#module.tx_html5mediaelements =< plugin.tx_html5mediaelements

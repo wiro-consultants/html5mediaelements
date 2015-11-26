@@ -1,0 +1,37 @@
+{namespace wiro=WIRO\Html5mediaelements\ViewHelpers}
+<f:layout name="Default" />
+
+<f:section name="main">
+	<f:for each="{media}" as="item">
+		<f:if condition="{item.optimizedMedia}">
+			<f:then>
+				<f:if condition="{item.poster}">
+					<f:then>
+						<wiro:media media="{item}" controls="1" preload="none" class="html5mediaelement">
+							<f:render section="fallback" arguments="{item: item}" />
+						</wiro:media>
+					</f:then>
+					<f:else>
+						<wiro:media media="{item}" controls="1" preload="metadata" class="html5mediaelement">
+							<f:render section="fallback" arguments="{item: item}" />
+						</wiro:media>
+					</f:else>
+				</f:if>
+			</f:then>
+			<f:else>
+				<f:render section="fallback" arguments="{item: item}" />
+			</f:else>
+		</f:if>
+	</f:for>
+</f:section>
+
+<f:section name="fallback">
+	<div class="html5mediaelement-fallback">
+		<a href="{item.sourceFile.originalResource.publicUrl}">
+			<f:if condition="{item.poster}">
+				<f:then><f:image image="{item.poster.originalResource}" title="{item.title}" /></f:then>
+				<f:else>{item.title}</f:else>
+			</f:if>
+		</a>
+	</div>
+</f:section>

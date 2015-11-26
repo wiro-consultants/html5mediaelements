@@ -1,0 +1,19 @@
+plugin.tx_html5mediaelements {
+	view {
+		# cat=plugin.tx_html5mediaelements/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:html5mediaelements/Resources/Private/Templates/
+		# cat=plugin.tx_html5mediaelements/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:html5mediaelements/Resources/Private/Partials/
+		# cat=plugin.tx_html5mediaelements/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:html5mediaelements/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_html5mediaelements//a; type=string; label=Default storage PID
+		storagePid =
+	}
+	settings {
+		includeJs = 1
+		includeJquery = 1
+		includeCss = 1
+	}
+}

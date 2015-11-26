@@ -1,0 +1,74 @@
+tx_html5mediaelements {
+	audio {
+
+	}
+
+	video {
+		mp4 {
+			name = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.video.mp4
+			filename = %s.mp4
+
+			format = Mp4
+#				audio = 1
+#				audio {
+#					codec = libfaac
+#					bitrate = 160k
+#				}
+#				video = 1
+#				video {
+#					codec = libx264
+#					bitrate = 1500k
+#					frameRate =
+#					height =
+#					width =
+#				}
+		}
+		webm {
+			name = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.video.webm
+			filename = %s.webm
+
+			format = Webm
+
+#				audio = 1
+#				audio {
+#					codec = libvorbis
+#					bitrate = 160k
+#				}
+#				video = 1
+#				video {
+#					codec = libvpx
+#					bitrate = 1500k
+#				}
+		}
+#		ogv {
+#			name = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.video.ogg
+#			filename = %s.ogv
+#
+#			format = Ogg
+#
+#				audio = 1
+#				audio {
+#					codec = libvorbis
+#					bitrate = 160k
+#				}
+#				video = 1
+#				video {
+#					codec = libtheora
+#					bitrate = 1500k
+#				}
+#		}
+	}
+
+	poster {
+		format = Jpeg
+		filename = %s.jpg
+	}
+}
+
+TCEFORM.tx_html5mediaelements_domain_model_mediaoptimized.format {
+	addItems {
+		mp4 < tx_html5mediaelements.video.mp4.name
+		webm < tx_html5mediaelements.video.webm.name
+#		ogv < tx_html5mediaelements.video.ogv.name
+	}
+}

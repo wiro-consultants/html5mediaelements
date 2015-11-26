@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+	</meta>
+	<sheets>
+		<sDEF>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:plugin.mediaelement.flexform.options</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<settings.media>
+						<TCEforms>
+							<label>LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:plugin.mediaelement.flexform.mediaRecords</label>
+							<exclude>1</exclude>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tx_html5mediaelements_domain_model_media</allowed>
+								<size>5</size>
+								<maxitems>99</maxitems>
+								<minitems>1</minitems>
+								<wizards>
+									<suggest>
+										<type>suggest</type>
+									</suggest>
+								</wizards>
+							</config>
+						</TCEforms>
+					</settings.media>
+				</el>
+			</ROOT>
+		</sDEF>
+	</sheets>
+</T3DataStructure>

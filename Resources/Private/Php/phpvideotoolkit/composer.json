@@ -1,0 +1,27 @@
+{
+    "name": "buggedcom/phpvideotoolkit",
+    "description": "PHPVideoToolkit is a set of classes aimed to provide a modular, object oriented and accessible interface for interacting with videos and audio through the FFmpeg program.",
+    "keywords": ["ffmpeg","video","audio","mp4","flv","mp3"],
+    "license": ["GPL-3.0+","MIT"],
+    "authors": [
+        {
+            "name": "Oliver Lillie",
+            "email": "ollie@buggedcom.co.uk",
+			"role": "Freelance/Lead Developer"
+        }
+	],
+    "require": {
+        "php": ">=5.3.0",
+        "sybio/gif-creator": "1.0.0"
+    },
+    "suggest": {
+        "tedivm/stash": "Stash is required to utilise PHPVideoToolkits Default Cache class 'Cache_Stash', however you can build your own caching classes so that Stash is not required.",
+        "monolog/monolog" : "Monolog is required to utilise PHPVideoToolkits Default Logging class 'Logger_Monolog', however you can build your own logger classes so that Monolog is not required."
+    },
+    "autoload": {
+        "psr-0": {
+            "PHPVideoToolkit\\": "src/",
+            "FFmpeg-PHP\\": "emulators/ffmpeg-php/"
+        }
+    }
+}

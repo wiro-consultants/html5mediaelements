@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-10-28T18:35:50Z" product-name="html5mediaelements">
+		<header/>
+		<body>
+			<trans-unit id="tx_html5mediaelements_domain_model_media">
+				<source>Media</source>
+				<target>Medien</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.title">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.description">
+				<source>Description</source>
+				<target>Beschreibung</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.tabs.media">
+				<source>Media</source>
+				<target>Medien</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.source_file">
+				<source>Original File</source>
+				<target>Originaldatei</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_convert">
+				<source>Generate web-friendly media files</source>
+				<target>Weboptimierte Medien erzeugen</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_crop">
+				<source>Crop video automatically</source>
+				<target>Video automatisch zuschneiden</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster">
+				<source>Generate preview image automatically</source>
+				<target>Vorschaubild automatisch generieren</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster.disabled">
+				<source>Disabled</source>
+				<target>Deaktiviert</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster.start">
+				<source>First frame</source>
+				<target>Erster Frame</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster.middle">
+				<source>Middle frame</source>
+				<target>Frame in der Mitte</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.auto_poster.end">
+				<source>Last frame</source>
+				<target>Letzter Frame</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.poster">
+				<source>Preview image</source>
+				<target>Vorschaubild</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.is_converted">
+				<source>Is Converted</source>
+				<target>Wurde konvertiert</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.is_cropped">
+				<source>Is Cropped</source>
+				<target>Wurde zugeschnitten</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.optimized_media">
+				<source>Optimized Media</source>
+				<target>Optimierte Medien</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized">
+				<source>Media Optimized</source>
+				<target>Optimierte Medien</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized.optimized_file">
+				<source>Optimized File</source>
+				<target>Optimierte Datei</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized.format">
+				<source>Format</source>
+				<target>Format</target>
+			</trans-unit>
+
+			<trans-unit id="plugin.mediaelement.name">
+				<source>Media Element</source>
+				<target>Medien</target>
+			</trans-unit>
+			<trans-unit id="plugin.mediaelement.flexform.options">
+				<source>Options</source>
+				<target>Optionen</target>
+			</trans-unit>
+			<trans-unit id="plugin.mediaelement.flexform.mediaRecords">
+				<source>Media Records</source>
+				<target>Medien</target>
+			</trans-unit>
+			<trans-unit id="wizicon.mediaelement.title">
+				<source>Media Element</source>
+				<target>Medien</target>
+			</trans-unit>
+			<trans-unit id="wizicon.mediaelement.description">
+				<source>Embeds audio and video files in the page</source>
+				<target>Bettet Audio- und Videodateien in die Seite ein</target>
+			</trans-unit>
+
+			<trans-unit id="formats.video.mp4">
+				<source>mp4 video</source>
+				<target>mp4-Video</target>
+			</trans-unit>
+			<trans-unit id="formats.video.webm">
+				<source>webM video</source>
+				<target>webM-Video</target>
+			</trans-unit>
+			<trans-unit id="formats.video.ogg">
+				<source>ogg video</source>
+				<target>ogg-Video</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
