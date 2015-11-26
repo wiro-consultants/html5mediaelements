@@ -32,6 +32,19 @@ namespace WIRO\Html5mediaelements\Domain\Model;
 class MediaOptimized extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	/**
+	 * Types
+	 */
+	const TYPE_VIDEO = 1;
+	const TYPE_AUDIO = 2;
+
+	/**
+	 * type
+	 *
+	 * @var integer
+	 */
+	protected $type = self::TYPE_VIDEO;
+
+	/**
 	 * optimizedFile
 	 *
 	 * @var \TYPO3\CMS\Extbase\Domain\Model\FileReference
@@ -46,6 +59,43 @@ class MediaOptimized extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @validate NotEmpty
 	 */
 	protected $format = '';
+
+	/**
+	 * Returns the type
+	 *
+	 * @return integer $type
+	 */
+	public function getType() {
+		return $this->type;
+	}
+
+	/**
+	 * Sets the type
+	 *
+	 * @param integer $type
+	 * @return void
+	 */
+	public function setType($type) {
+		$this->type = $type;
+	}
+
+	/**
+	 * Checks if the media is a video file
+	 *
+	 * @return boolean  true if media is a video file
+	 */
+	public function isVideo() {
+		return $this->type === self::TYPE_VIDEO;
+	}
+
+	/**
+	 * Checks if the media is an audio file
+	 *
+	 * @return boolean  true if media is an audio file
+	 */
+	public function isAudio() {
+		return $this->type === self::TYPE_AUDIO;
+	}
 
 	/**
 	 * Returns the optimizedFile

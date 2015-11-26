@@ -7,6 +7,18 @@
 				<source>Media</source>
 				<target>Medien</target>
 			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.type">
+				<source>Media type</source>
+				<target>Medientyp</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.type.video">
+				<source>Video</source>
+				<target>Video</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_media.type.audio">
+				<source>Audio</source>
+				<target>Audio</target>
+			</trans-unit>
 			<trans-unit id="tx_html5mediaelements_domain_model_media.title">
 				<source>Title</source>
 				<target>Titel</target>
@@ -71,6 +83,18 @@
 				<source>Media Optimized</source>
 				<target>Optimierte Medien</target>
 			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized.type">
+				<source>Media type</source>
+				<target>Medientyp</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized.type.video">
+				<source>Video</source>
+				<target>Video</target>
+			</trans-unit>
+			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized.type.audio">
+				<source>Audio</source>
+				<target>Audio</target>
+			</trans-unit>
 			<trans-unit id="tx_html5mediaelements_domain_model_mediaoptimized.optimized_file">
 				<source>Optimized File</source>
 				<target>Optimierte Datei</target>
@@ -112,6 +136,14 @@
 			<trans-unit id="formats.video.ogg">
 				<source>ogg video</source>
 				<target>ogg-Video</target>
+			</trans-unit>
+			<trans-unit id="formats.audio.mp3">
+				<source>mp3 audio</source>
+				<target>mp3-Audio</target>
+			</trans-unit>
+			<trans-unit id="formats.audio.ogg">
+				<source>ogg audio</source>
+				<target>ogg-Audio</target>
 			</trans-unit>
 		</body>
 	</file>

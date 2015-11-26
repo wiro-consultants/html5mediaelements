@@ -1,74 +1,133 @@
 tx_html5mediaelements {
-	audio {
+	poster {
+		filename = ###NAME###.jpg
+		format = Jpeg
 
+		height =
+		width =
+		quality =
+	}
+
+	audio {
+		mp3 {
+			filename = ###NAME###.mp3
+			format = Mp3
+
+			audio {
+				enabled = 1
+				codec =
+				bitrate =
+				quality =
+				sampleFrequency =
+				channels =
+				volume =
+			}
+		}
+
+		ogg {
+			filename = ###NAME###.oga
+			format = Oga
+		}
 	}
 
 	video {
 		mp4 {
-			name = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.video.mp4
-			filename = %s.mp4
-
+			filename = ###NAME###.mp4
 			format = Mp4
-#				audio = 1
-#				audio {
-#					codec = libfaac
-#					bitrate = 160k
-#				}
-#				video = 1
-#				video {
-#					codec = libx264
-#					bitrate = 1500k
-#					frameRate =
-#					height =
-#					width =
-#				}
+
+			audio {
+				enabled = 1
+				codec =
+				bitrate =
+				quality =
+				sampleFrequency =
+				channels =
+				volume =
+			}
+
+			video {
+				enabled = 1
+				codec =
+				height =
+				width =
+				aspectRatio =
+				frameRate =
+				maxFrames =
+				bitrate =
+				pixelFormat =
+				quality =
+				h264 {
+					preset =
+					tune =
+					profile =
+				}
+			}
 		}
 		webm {
-			name = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.video.webm
-			filename = %s.webm
-
+			filename = ###NAME###.webm
 			format = Webm
-
-#				audio = 1
-#				audio {
-#					codec = libvorbis
-#					bitrate = 160k
-#				}
-#				video = 1
-#				video {
-#					codec = libvpx
-#					bitrate = 1500k
-#				}
 		}
-#		ogv {
-#			name = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.video.ogg
-#			filename = %s.ogv
-#
-#			format = Ogg
-#
-#				audio = 1
-#				audio {
-#					codec = libvorbis
-#					bitrate = 160k
-#				}
-#				video = 1
-#				video {
-#					codec = libtheora
-#					bitrate = 1500k
-#				}
-#		}
+		ogv {
+			filename = ###NAME###.ogv
+			format = Ogg
+		}
 	}
 
-	poster {
-		format = Jpeg
-		filename = %s.jpg
+	notification {
+		success {
+			subject = Media files converted successfully
+			message (
+The following media files have been converted to web-friendly formats:
+
+###MEDIAFILES###
+
+If you want to embed the converted files, just enter the TYPO3 backend:
+
+###BACKEND_URL###
+
+###SIGNATURE###
+)
+			mediafiles = * ###TITLE### (###UID###)
+			signature =
+		}
+		error {
+			subject = Error while converting media files
+			message (
+An error occured while converting the following media files:
+
+###MEDIAFILES###
+
+During the conversion the following error occured:
+
+###ERROR###
+
+###SIGNATURE###
+)
+			mediafiles = * ###TITLE### (###UID###)
+			signature =
+		}
 	}
 }
 
-TCEFORM.tx_html5mediaelements_domain_model_mediaoptimized.format {
-	addItems {
-		mp4 < tx_html5mediaelements.video.mp4.name
-		webm < tx_html5mediaelements.video.webm.name
-#		ogv < tx_html5mediaelements.video.ogv.name
+TCEFORM.tx_html5mediaelements_domain_model_media {
+	# Cropping is not implemented yet
+	auto_crop.disabled = 1
+	is_cropped.disabled = 1
+
+	# Status fields are read only by default
+	is_cropped.config.readOnly = 1
+	is_converted.config.readOnly = 1
+}
+
+TCEFORM.tx_html5mediaelements_domain_model_mediaoptimized.format.types {
+	1.addItems {
+		mp4 = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.video.mp4
+		webm = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.video.webm
+		ogv = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.video.ogg
+	}
+
+	2.addItems {
+		mp3 = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.audio.mp3
+		ogg = LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:formats.audio.ogg
 	}
 }

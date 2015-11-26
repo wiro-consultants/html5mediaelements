@@ -32,12 +32,25 @@ namespace WIRO\Html5mediaelements\Domain\Model;
 class Media extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	/**
+	 * Types
+	 */
+	const TYPE_VIDEO = 1;
+	const TYPE_AUDIO = 2;
+
+	/**
 	 * Options for autoPoster
 	 */
 	const AUTO_POSTER_DISABLED = 0;
 	const AUTO_POSTER_START = 1;
 	const AUTO_POSTER_MIDDLE = 2;
 	const AUTO_POSTER_END = 3;
+
+	/**
+	 * type
+	 *
+	 * @var integer
+	 */
+	protected $type = self::TYPE_VIDEO;
 
 	/**
 	 * title
@@ -129,6 +142,43 @@ class Media extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 */
 	protected function initStorageObjects() {
 		$this->optimizedMedia = new \TYPO3\CMS\Extbase\Persistence\ObjectStorage();
+	}
+
+	/**
+	 * Returns the type
+	 *
+	 * @return integer $type
+	 */
+	public function getType() {
+		return $this->type;
+	}
+
+	/**
+	 * Sets the type
+	 *
+	 * @param integer $type
+	 * @return void
+	 */
+	public function setType($type) {
+		$this->type = $type;
+	}
+
+	/**
+	 * Checks if the media is a video file
+	 *
+	 * @return boolean  true if media is a video file
+	 */
+	public function isVideo() {
+		return $this->type === self::TYPE_VIDEO;
+	}
+
+	/**
+	 * Checks if the media is an audio file
+	 *
+	 * @return boolean  true if media is an audio file
+	 */
+	public function isAudio() {
+		return $this->type === self::TYPE_AUDIO;
 	}
 
 	/**
@@ -386,4 +436,11 @@ class Media extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->optimizedMedia = $optimizedMedia;
 	}
 
+	/**
+	 * Convert model to array
+	 * @return array  Converted model
+	 */
+	public function toArray() {
+		return \TYPO3\CMS\Extbase\Reflection\ObjectAccess::getGettableProperties($this);
+	}
 }

@@ -59,26 +59,30 @@ class MediaRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 
 		// Only return records that need processing
 		$query->matching(
-			// Source file exists and ...
-			$query->equals('sourceFile', 1),
 			$query->logicalAnd(
-				$query->logicalOr(
-					// Media files need to be converted or ...
-					$query->logicalAnd(
-						$query->equals('isConverted', 0),
-						$query->equals('autoConvert', 1)
-					),
-					// Video files need to be cropped or ...
-					$query->logicalAnd(
-						$query->equals('isCropped', 0),
-						$query->equals('autoCrop', 1)
-					),
-					// A poster has to be created
-					$query->logicalAnd(
-						$query->logicalNot(
-							$query->equals('autoPoster', Media::AUTO_POSTER_DISABLED)
+				// Source file exists and ...
+				$query->equals('sourceFile', 1),
+				$query->logicalAnd(
+					$query->logicalOr(
+						// Media files need to be converted or ...
+						$query->logicalAnd(
+							$query->equals('isConverted', 0),
+							$query->equals('autoConvert', 1)
 						),
-						$query->equals('poster', 0)
+						// Video files need to be cropped or ...
+						$query->logicalAnd(
+							$query->equals('type', Media::TYPE_VIDEO),
+							$query->equals('isCropped', 0),
+							$query->equals('autoCrop', 1)
+						),
+						// A poster has to be created
+						$query->logicalAnd(
+							$query->equals('type', Media::TYPE_VIDEO),
+							$query->logicalNot(
+								$query->equals('autoPoster', Media::AUTO_POSTER_DISABLED)
+							),
+							$query->equals('poster', 0)
+						)
 					)
 				)
 			)

@@ -6,16 +6,30 @@ if (!defined ('TYPO3_MODE')) {
 $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 	'ctrl' => $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized']['ctrl'],
 	'interface' => array(
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, optimized_file, format',
+		'showRecordFieldList' => 'type, sys_language_uid, l10n_parent, l10n_diffsource, hidden, optimized_file, format',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, optimized_file, format, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden;;1, starttime, endtime'),
+		'1' => array('showitem' => 'type, sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, optimized_file, format, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden;;1, starttime, endtime'),
+		'2' => array('showitem' => 'type, sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, optimized_file, format, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden;;1, starttime, endtime'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
 	),
 	'columns' => array(
-
+		'type' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_mediaoptimized.type',
+			'config' => array(
+				'type' => 'select',
+				'items' => array(
+					array('LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_mediaoptimized.type.video', 1),
+					array('LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_mediaoptimized.type.audio', 2),
+				),
+				'size' => 1,
+				'maxitems' => 1,
+				'default' => 1
+			)
+		),
 		'sys_language_uid' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
@@ -47,7 +61,6 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 				'type' => 'passthrough',
 			),
 		),
-
 		't3ver_label' => array(
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.versionLabel',
 			'config' => array(
@@ -120,7 +133,6 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 				'eval' => 'required'
 			),
 		),
-
 		'media' => array(
 			'config' => array(
 				'type' => 'passthrough',

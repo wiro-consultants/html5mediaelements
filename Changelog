@@ -1,0 +1,12 @@
+2015-11-05 Simon Praetorius <praetorius@wiro-consultants.de> v2.0.0
+	* Media plugin
+	* Media records
+	* Generate poster images automatically
+	* Generate web-friendly media files automatically
+
+2015-11-09 Simon Praetorius <praetorius@wiro-consultants.de> v2.1.0
+	* Audio support
+	* Improved encoding configuration
+	* More flexible output file naming
+	* Error reporting
+	* Success notification

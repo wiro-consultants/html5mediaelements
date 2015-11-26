@@ -55,7 +55,9 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedV
 		'video/ogg',
 		'audio/mp4',
 		'audio/mp3',
-		'audio/ogg'
+		'audio/mpeg',
+		'audio/ogg',
+		'application/ogg'
 	);
 
 	/**
@@ -66,7 +68,8 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedV
 	protected $fallbackFormats = array(
 		'video/mp4',
 		'video/x-flv',
-		'audio/mp3'
+		'audio/mp3',
+		'audio/mpeg'
 	);
 
 	/**
@@ -160,6 +163,11 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedV
 			$this->fallbackFormats = $fallbackFormats;
 		}
 
+		// Render audio content with <audio> tag
+		if ($media->isAudio()) {
+			$this->tag->setTagName('audio');
+		}
+
 		// Use valid HTML5 boolean attributes
 		foreach (array('controls', 'autoplay', 'loop', 'muted') as $attribute) {
 			if ($this->tag->hasAttribute($attribute)) {
@@ -176,10 +184,10 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedV
 
 		// Render HTML5 source candidates
 		// Attempt to set video dimensions
-		$sourceCandidates = $this->renderSources($orderedMedia);
+		$sourceCandidates = $this->renderSources($media, $orderedMedia);
 
 		// Set video poster image
-		if ($media->getPoster()) {
+		if ($media->isVideo() && $media->getPoster()) {
 			$this->tag->addAttribute('poster', $this->generatePublicUrl($media->getPoster()->getOriginalResource()));
 
 			// Attempt to set video dimensions (if not set already)
@@ -205,10 +213,11 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedV
 	/**
 	 * Renders HTML5 source candidates
 	 *
-	 * @param  array $orderedMedia  source candidates
-	 * @return string               HTML <source> tags
+	 * @param  \WIRO\Html5mediaelements\Domain\Model\Media $media         media record
+	 * @param  array                                       $orderedMedia  source candidates
+	 * @return string                                                     HTML <source> tags
 	 */
-	protected function renderSources(array $orderedMedia) {
+	protected function renderSources(\WIRO\Html5mediaelements\Domain\Model\Media $media, array $orderedMedia) {
 		$sourceCandidates = '';
 		foreach ($orderedMedia as $mediaFile) {
 			// Create new <source> tag
@@ -221,8 +230,10 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedV
 			// Add to available sources
 			$sourceCandidates .= $sourceTag->render();
 
-			// Attempt to set video dimensions (first candidate wins)
-			$this->addVideoDimensions($mediaFile->getOriginalResource());
+			if ($media->isVideo()) {
+				// Attempt to set video dimensions (first candidate wins)
+				$this->addVideoDimensions($mediaFile->getOriginalResource());
+			}
 		}
 
 		return $sourceCandidates;
@@ -301,7 +312,7 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedV
 		$aTag = $this->objectManager->get('TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder', 'a');
 		$aTag->addAttribute('href', $this->generatePublicUrl($primaryMediaFile->getOriginalResource()));
 
-		if ($media->getPoster()) {
+		if ($media->isVideo() && $media->getPoster()) {
 			// Generate <img> tag containing the poster image
 			$imgTag = $this->objectManager->get('TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder', 'img');
 			$imgTag->addAttributes(array(

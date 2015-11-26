@@ -5,6 +5,7 @@ CREATE TABLE tx_html5mediaelements_domain_model_media (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 
+	type int(11) unsigned NOT NULL DEFAULT '1',
 	title varchar(255) DEFAULT '' NOT NULL,
 	description text NOT NULL,
 	source_file int(11) unsigned NOT NULL default '0',
@@ -52,6 +53,7 @@ CREATE TABLE tx_html5mediaelements_domain_model_mediaoptimized (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 
+	type int(11) unsigned NOT NULL DEFAULT '1',
 	media int(11) unsigned DEFAULT '0' NOT NULL,
 	optimized_file int(11) unsigned NOT NULL default '0',
 	format varchar(50) DEFAULT '' NOT NULL,

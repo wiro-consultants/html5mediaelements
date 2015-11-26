@@ -45,6 +45,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
+		'type' => 'type',
 		'dividers2tabs' => TRUE,
 
 		'versioningWS' => 2,
@@ -59,7 +60,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 			'starttime' => 'starttime',
 			'endtime' => 'endtime',
 		),
-		'searchFields' => 'title,description,source_file,auto_convert,auto_crop,auto_poster,poster,is_converted,is_cropped,optimized_media,',
+		'searchFields' => 'type,title,description,source_file,auto_convert,auto_crop,auto_poster,poster,is_converted,is_cropped,optimized_media,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Media.php',
 		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_html5mediaelements_domain_model_media.png'
 	),
@@ -81,6 +82,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 		'tstamp' => 'tstamp',
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
+		'type' => 'type',
 		'dividers2tabs' => TRUE,
 		'sortby' => 'sorting',
 		'versioningWS' => 2,
@@ -96,7 +98,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 			'starttime' => 'starttime',
 			'endtime' => 'endtime',
 		),
-		'searchFields' => 'optimized_file,format,',
+		'searchFields' => 'type,optimized_file,format,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/MediaOptimized.php',
 		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_html5mediaelements_domain_model_mediaoptimized.png'
 	),

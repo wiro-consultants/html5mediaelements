@@ -66,81 +66,202 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 	 */
 	protected $mediaRepository;
 
+	/**
+	 * ContentObject Renderer
+	 * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+	 * @inject
+	 */
+	protected $cObj;
+
 	protected $pageTSconfigCache = array();
 
 	protected $tempPath;
 	protected $tempPathPhp;
 	protected $tempPathFiles;
 
+	protected $defaultPoster;
+	protected $defaultAudio;
+	protected $defaultVideo;
+	protected $defaultConfig;
+
+	/**
+	 * Initializes the task
+	 * @return void
+	 */
+	protected function initialize() {
+		$this->defaultAudio = array(
+			'filename' => '###NAME###',
+			'format' => '',
+			'audio' => array(
+				'enabled' => true,
+				'codec' => '',
+				'bitrate' => '',
+				'quality' => '',
+				'sampleFrequency' => '',
+				'channels' => '',
+				'volume' => ''
+			)
+		);
+
+		$this->defaultVideo = $this->defaultAudio;
+		$this->defaultVideo['video'] = array(
+			'enabled' => true,
+			'codec' => '',
+			'height' => '',
+			'width' => '',
+			'aspectRatio' => '',
+			'frameRate' => '',
+			'maxFrames' => '',
+			'bitrate' => '',
+			'pixelFormat' => '',
+			'quality' => '',
+			'h264' => array(
+				'preset' => '',
+				'tune' => '',
+				'profile' => ''
+			)
+		);
+
+		$this->defaultConfig = array(
+			'notification' => array(
+				'error' => array(
+					'subject' => 'Error during task execution',
+					'message' => "An error occured during task execution\n\n###ERROR###",
+					'mediafiles' => '###TITLE### (###UID###)',
+					'signature' => ''
+				),
+				'success' => array(
+					'subject' => 'Conversion successful',
+					'message' => '###MEDIAFILES###',
+					'mediafiles' => '###TITLE### (###UID###)',
+					'signature' => ''
+				),
+			),
+			'poster' => array(
+				'filename' => '###NAME###.jpg',
+				'format' => '',
+				'height' => '',
+				'width' => '',
+				'quality' => ''
+			),
+			'audio' => array(),
+			'video' => array()
+		);
+	}
+
 	/**
 	 * Perform media file optimization
-	 * @param  string $ffmpegPath   Path to ffmpeg executable
-	 * @param  string $ffprobePath  Path to ffprobe executable
-	 * @param  string $tempPath     Temporary path
-	 * @return string               Task status
+	 * @param  string $ffmpegPath    Path to ffmpeg executable
+	 * @param  string $ffprobePath   Path to ffprobe executable
+	 * @param  string $tempPath      Temporary path
+	 * @param  string $errorEmail    Notification recipient(s) for errors
+	 * @param  string $successEmail  Notification recipient(s) for success
+	 * @return string                Task status
 	 */
 	public function optimizeMediaCommand(
 		$ffmpegPath = '/usr/local/bin/ffmpeg',
 		$ffprobePath = '/usr/local/bin/ffprobe',
-		$tempPath = 'typo3temp/phpvideotoolkit'
+		$tempPath = 'typo3temp/phpvideotoolkit',
+		$errorEmail = '',
+		$successEmail = ''
 	) {
 		// Don't do anything without valid configuration
 		if (!$tempPath || !$ffmpegPath || !$ffprobePath) {
 			return false;
 		}
 
-		// Create folder structure for temporary files
-		$this->tempPath = rtrim(GeneralUtility::getFileAbsFileName($tempPath), '/') . '/';
-		GeneralUtility::mkdir_deep($this->tempPath);
+		try {
+			// Initialize task
+			$this->initialize();
 
-		$this->tempPathPhp = $this->tempPath . 'php/';
-		GeneralUtility::mkdir($this->tempPathPhp);
+			// Create folder structure for temporary files
+			$this->tempPath = rtrim(GeneralUtility::getFileAbsFileName($tempPath), '/') . '/';
+			GeneralUtility::mkdir_deep($this->tempPath);
 
-		$this->tempPathFiles = $this->tempPath . 'files/';
-		GeneralUtility::mkdir($this->tempPathFiles);
+			$this->tempPathPhp = $this->tempPath . 'php/';
+			GeneralUtility::mkdir($this->tempPathPhp);
 
-		// Initialize PHP Video Toolkit
-		require \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('html5mediaelements', 'Resources/Private/Php/phpvideotoolkit/autoloader.php');
+			$this->tempPathFiles = $this->tempPath . 'files/';
+			GeneralUtility::mkdir($this->tempPathFiles);
 
-		// Configure PHP Video Toolkit
-		$toolkitConfig = new \PHPVideoToolkit\Config(array(
-			'temp_directory' => $this->tempPathPhp,
-			'cache_driver' => 'InTempDirectory',
-
-			'ffmpeg' => $ffmpegPath,
-			'ffprobe' => $ffprobePath,
-		), true);
-
-		// Find all media records that need to be optimized
-		$mediaRecords = $this->mediaRepository->findOptimizeQueue();
-
-		foreach ($mediaRecords as $mediaRecord) {
-			// Get configuration for this page
-			$config = $this->getPageTSconfig($mediaRecord->getPid());
-
-			// TODO Validate config
-
-			// Set dimension metadata for the source video file
-			$this->setVideoDimensions(
-				$mediaRecord->getSourceFile()->getOriginalResource()->getOriginalFile()
+			// Initialize PHP Video Toolkit
+			require \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(
+				'html5mediaelements',
+				'Resources/Private/Php/phpvideotoolkit/autoloader.php'
 			);
 
-			// Should the video file get cropped?
-			if (!$mediaRecord->getIsCropped() && $mediaRecord->getAutoCrop()) {
-				// Determine cropping factor
+			// Configure PHP Video Toolkit
+			$toolkitConfig = new \PHPVideoToolkit\Config(array(
+				'temp_directory' => $this->tempPathPhp,
+				'cache_driver' => 'InTempDirectory',
+
+				'ffmpeg' => $ffmpegPath,
+				'ffprobe' => $ffprobePath,
+			), true);
+
+			// Find all media records that need to be optimized
+			$mediaRecords = $this->mediaRepository->findOptimizeQueue();
+
+			foreach ($mediaRecords as $media) {
+				// Get configuration for this page
+				$config = $this->getPageTSconfig($media->getPid());
+				$config = $this->validateConfig($config);
+
+				// Set dimension metadata for the source media file
+				$this->setFileMetadata(
+					$media->getSourceFile()->getOriginalResource()->getOriginalFile()
+				);
+
+				// Should the video file get cropped?
 				$croppingChanged = false;
+				/*
+				if ($media->isVideo() && !$media->getIsCropped() && $media->getAutoCrop()) {
+					// TODO Determine cropping factor
+					$croppingChanged = false;
+				}
+				*/
+
+				// Should the media files be converted?
+				if (
+					$media->getAutoConvert() &&
+					(!$media->getIsConverted() || $croppingChanged)
+				) {
+					// Convert video
+					$convertConfig = ($media->isAudio()) ? $config['audio'] : $config['video'];
+					$this->convertMedia($media, $convertConfig);
+				}
+
+				// Should a poster image be generated?
+				if (
+					$media->isVideo() &&
+					$media->getAutoPoster() !== Media::AUTO_POSTER_DISABLED &&
+					!$media->getPoster()
+				) {
+					$this->generatePosterImage($media, $config['poster']);
+				}
+
+				// Send notification email on success?
+				if ($successEmail) {
+					$this->sendNotification($successEmail, $config['notification']['success'], $media);
+				}
+			}
+		} catch (\Exception $e) {
+			// No recipient for errors specified? => Don't handle exceptions
+			if (!$errorEmail) {
+				throw $e;
 			}
 
-			// Should the media files be converted?
-			if ($mediaRecord->getAutoConvert() && (!$mediaRecord->getIsConverted() || $croppingChanged)) {
-				// Convert video
-				$this->convertVideo($mediaRecord, $config['video']);
+			// Use default configuration as fallback if the error happened before a
+			// configuration was present
+			if (!isset($config)) {
+				$config = $this->defaultConfig;
 			}
 
-			// Should a poster image be generated
-			if ($mediaRecord->getAutoPoster() !== Media::AUTO_POSTER_DISABLED && (!$mediaRecord->getPoster() || $croppingChanged)) {
-				$this->generatePosterImage($mediaRecord, $config['poster']);
-			}
+			// Send notification email with error output
+			$this->sendNotification($errorEmail, $config['notification']['error'], $media, $e);
+
+			// Show error status of task
+			return false;
 		}
 
 		return true;
@@ -185,16 +306,24 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 		}
 
 		// Generate poster file name
-		$fileIdentifier = basename(
-			$originalFile->getProperty('name'),
-			'.' . $originalFile->getProperty('extension')
-		);
-		$fileName = sprintf($config['filename'], $fileIdentifier);
+		$fileName = $this->generateFilename($originalFile, $config['filename']);
 		$filePath = $this->tempPathFiles . $fileName;
 
 		// Configure output format
-		$format = \PHPVideoToolkit\Format::getFormatFor($filePath, null, 'VideoFormat');
-		// TODO set configuration options
+		$className = '\\PHPVideoToolkit\\ImageFormat_' . ucfirst($config['format']);
+		if ($config['format'] && class_exists($className)) {
+			$format = new $className;
+		} else {
+			$format = \PHPVideoToolkit\Format::getFormatFor($filePath, null, 'ImageFormat');
+		}
+
+		// Set format options from configuration
+		if ($config['quality']) {
+			$format->setVideoQuality($config['quality']);
+		}
+		if ($config['width'] && $config['height']) {
+			$format->setVideoDimensions($config['width'], $config['height'], true);
+		}
 
 		// Extract video frame
 		$video  = new \PHPVideoToolkit\Video($localFile);
@@ -221,56 +350,140 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 	}
 
 	/**
-	 * Converts source video to configured video formats and references them
+	 * Converts source media to configured media formats and references them
 	 *
 	 * @param  \WIRO\Html5mediaelements\Domain\Model\Media $media   media record
-	 * @param  array                                       $config  conversion configuration for videos
+	 * @param  array                                       $config  conversion configuration for media formats
 	 * @return void
 	 */
-	protected function convertVideo(Media $media, array $config) {
+	protected function convertMedia(Media $media, array $config) {
 		// Create a local file for processing
 		$originalFile = $media->getSourceFile()->getOriginalResource()
 			->getOriginalFile();
 		$localFile = $originalFile->getForLocalProcessing(FALSE);
 
-		// Generate video file name (1)
-		$fileIdentifier = basename(
-			$originalFile->getProperty('name'),
-			'.' . $originalFile->getProperty('extension')
-		);
-
 		// Prepare for conversion
-		$video  = new \PHPVideoToolkit\Video($localFile);
+		if ($media->isAudio()) {
+			$source  = new \PHPVideoToolkit\Audio($localFile);
+		} else {
+			$source = new \PHPVideoToolkit\Video($localFile);
+		}
 		$multiOutput = new \PHPVideoToolkit\MultiOutput();
 
-		$inputFiles = array();
-		foreach ($config as $formatName => $format) {
-			// Generate video file name (2)
-			$fileName = sprintf($format['filename'], $fileIdentifier);
+		$outputContext = array();
+		foreach ($config as $formatName => $formatConfig) {
+			// Skip files without audio and video
+			if (
+				($media->isAudio() && !$formatConfig['audio']['enabled']) ||
+				($media->isVideo() && !$formatConfig['audio']['enabled'] && !$formatConfig['video']['enabled'])
+			) {
+				continue;
+			}
+
+			// Generate video file name
+			$fileName = $this->generateFilename($originalFile, $formatConfig['filename']);
 			$filePath = $this->tempPathFiles . $fileName;
 
 			// Store information about conversion input
-			$inputFiles[] = array(
+			$outputContext[] = array(
 				'format' => $formatName,
 				'path' => $filePath,
 				'name' => $fileName
 			);
 
 			// Configure output format
-			$format = \PHPVideoToolkit\Format::getFormatFor($filePath, null, 'VideoFormat');
-			//$format->setVideoDimensions(\PHPVideoToolkit\VideoFormat::DIMENSION_HD480);
-			// TODO set configuration options
+			$fallbackFormat = ($media->isAudio()) ? 'AudioFormat' : 'VideoFormat';
+			$className = '\\PHPVideoToolkit\\' . $fallbackFormat . '_' . ucfirst($formatConfig['format']);
+			if ($formatConfig['format'] && class_exists($className)) {
+				$format = new $className;
+			} else {
+				$format = \PHPVideoToolkit\Format::getFormatFor($filePath, null, $fallbackFormat);
+			}
+
+			// Set format options from configuration
+			if ($formatConfig['audio']['enabled']) {
+				if ($formatConfig['audio']['codec']) {
+					$format->setAudioCodec($formatConfig['audio']['codec']);
+				}
+				if ($formatConfig['audio']['bitrate']) {
+					$format->setAudioBitrate((float) $formatConfig['audio']['bitrate']);
+				}
+				if ($formatConfig['audio']['quality']) {
+					$format->setAudioQuality((float) $formatConfig['audio']['quality']);
+				}
+				if ($formatConfig['audio']['sampleFrequency']) {
+					$format->setAudioSampleFrequency((int) $formatConfig['audio']['sampleFrequency']);
+				}
+				if ($formatConfig['audio']['channels']) {
+					$format->setAudioChannels((int) $formatConfig['audio']['channels']);
+				}
+				if ($formatConfig['audio']['volume']) {
+					$format->setVolume((int) $formatConfig['audio']['volume']);
+				}
+			} else {
+				$format->disableAudio();
+			}
+
+			if ($media->isVideo()) {
+				if ($formatConfig['video']['enabled']) {
+					if ($formatConfig['video']['codec']) {
+						$format->setVideoCodec($formatConfig['video']['codec']);
+					}
+					if ($formatConfig['video']['width'] && $formatConfig['video']['height']) {
+						$format->setVideoDimensions($formatConfig['video']['width'], $formatConfig['video']['height'], true);
+					}
+					if ($formatConfig['video']['aspectRatio']) {
+						$format->setVideoAspectRatio($formatConfig['video']['aspectRatio'], true);
+					}
+					if ($formatConfig['video']['frameRate']) {
+						$format->setVideoFrameRate((float) $formatConfig['video']['frameRate']);
+					}
+					if ($formatConfig['video']['maxFrames']) {
+						$format->setVideoMaxFrames($formatConfig['video']['maxFrames']);
+					}
+					if ($formatConfig['video']['bitrate']) {
+						$format->setVideoBitrate($formatConfig['video']['bitrate']);
+					}
+					if ($formatConfig['video']['pixelFormat']) {
+						$format->setVideoPixelFormat($formatConfig['video']['pixelFormat']);
+					}
+					if ($formatConfig['video']['quality']) {
+						$format->setVideoQuality((float) $formatConfig['video']['quality']);
+					}
+					if ($formatConfig['video']['h264']['preset']) {
+						$format->setH264Preset($formatConfig['video']['h264']['preset']);
+					}
+					if ($formatConfig['video']['h264']['tune']) {
+						$format->setH264Tune($formatConfig['video']['h264']['tune']);
+					}
+					if ($formatConfig['video']['h264']['profile']) {
+						$format->setH264Profile($formatConfig['video']['h264']['profile']);
+					}
+				} else {
+					$format->disableVideo();
+				}
+			}
 
 			// Add to conversion command
 			$multiOutput->addOutput($filePath, $format);
 		}
 
+		if (empty($outputContext)) {
+			return;
+		}
+
+		// TODO make asynchronous
+		$process = $source->save($multiOutput, null, \PHPVideoToolkit\Media::OVERWRITE_UNIQUE);
+
+		/*
 		// Start conversion
 		$progressHandler = new \PHPVideoToolkit\ProgressHandlerNative(null);
-		$process = $video->saveNonBlocking($multiOutput, null, \PHPVideoToolkit\Media::OVERWRITE_UNIQUE, $progressHandler);
+		$process = $source->saveNonBlocking($multiOutput, null, \PHPVideoToolkit\Media::OVERWRITE_UNIQUE, $progressHandler);
+
+		\TYPO3\CMS\Extbase\Utility\DebuggerUtility::var_dump($progressHandler, 'SP');
+		return;
 
 		// Wait for files being converted
-		// TODO make asynchronous
 		$lastStatus = null;
 		while ($progressHandler->completed !== true) {
 			$probe = $progressHandler->probe(true);
@@ -281,22 +494,23 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 
 			sleep(0.5);
 		}
+		*/
 
 		// Get converted files
 		$outputFiles = $process->getAllOutput();
 
-		foreach ($inputFiles as $i => $fileOptions) {
+		foreach ($outputContext as $i => $fileOptions) {
 			// Add converted file to FAL
 			$file = $originalFile->getParentFolder()->addFile($outputFiles[$i], $fileOptions['name'], 'changeName');
 			// TODO check for permission of user (_cli_scheduler)
 
 			// Set dimension metadata of converted file
-			// TODO performance!
-			$this->setVideoDimensions($file);
+			$this->setFileMetadata($file);
 
 			// Create new optimized media record
 			$mediaOptimized = $this->objectManager->get('WIRO\Html5mediaelements\Domain\Model\MediaOptimized');
 			$mediaOptimized->setPid($media->getPid());
+			$mediaOptimized->setType(($media->isAudio()) ? MediaOptimized::TYPE_AUDIO : MediaOptimized::TYPE_VIDEO);
 			$mediaOptimized->setFormat($fileOptions['format']);
 
 			// Add reference to media record
@@ -358,6 +572,116 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 	}
 
 	/**
+	 * Updates the dimension (height, width) and duration metadata of the specified media file in FAL
+	 *
+	 * @param  \TYPO3\CMS\Core\Resource\File $file  FAL record
+	 * @return void
+	 */
+	protected function setFileMetadata(\TYPO3\CMS\Core\Resource\File $file) {
+		// Get file for local processing
+		$localFile = $file->getForLocalProcessing(FALSE);
+
+		// Fetch media information
+		$parser = new \PHPVideoToolkit\MediaParser();
+		$fileInfo = $parser->getFileInformation($localFile);
+
+		// Collect relevant media information
+		$fileMetadata = array();
+		$fileMetadata['duration'] = $fileInfo['duration']->total_seconds;
+		if (isset($fileInfo['video']['dimensions'])) {
+			$fileMetadata['height'] = $fileInfo['video']['dimensions']['height'];
+			$fileMetadata['width'] = $fileInfo['video']['dimensions']['width'];
+		}
+
+		// Update metadata of FAL record
+		if (!empty($fileMetadata)) {
+			$file->_updateMetaDataProperties($fileMetadata);
+			$this->metaDataRepository->update($file->getUid(), $fileMetadata);
+		}
+	}
+
+	/**
+	 * Generates a new file name based on an existing file and the format of the new name
+	 * @param  \TYPO3\CMS\Core\Resource\File $file            original file
+	 * @param  string                        $filenameFormat  filename format with markers
+	 * @return string                                         new file name
+	 */
+	protected function generateFilename(\TYPO3\CMS\Core\Resource\File $file, $filenameFormat) {
+		return $this->cObj->substituteMarkerArray($filenameFormat, array(
+			'###NAME###' => basename(
+				$file->getProperty('name'),
+				($file->getProperty('extension')) ? '.' . $file->getProperty('extension') : ''
+			),
+			'###EXTENSION###' => $file->getProperty('extension'),
+			'###UID###' => $file->getUid(),
+			'###SHA1###' => $file->getProperty('sha1'),
+			'###HASH###' => $file->getProperty('identifier_hash'),
+			'###UNIQUE###' => md5(uniqid($file->getProperty('name'), true))
+		));
+	}
+
+	/**
+	 * Sends a notification email
+	 *
+	 * @param  string     $recipients  comma-separated list of email addresses that should
+	 *                                 receive the notification
+	 * @param  array      $config      notification configuration
+	 * @param  object     $media       one or multiple media records (QueryResult)
+	 * @param  \Exception $exception   the exception that was thrown
+	 * @return boolean                 success status of email
+	 */
+	protected function sendNotification($recipients, array $config, object $media, \Exception $exception = NULL) {
+		// Convert comma-separated list to array
+		$recipients = array_map('trim', explode(',', $recipients));
+
+		// Generate markers for the email subject and content
+		$markers = array(
+			'###SIGNATURE###' => $config['signature'],
+			'###BACKEND_URL###' => GeneralUtility::locationHeaderUrl('/typo3/')
+		);
+
+		if (isset($exception)) {
+			$markers['###ERROR###'] = $exception->getMessage();
+			$markers['###ERROR_FILE###'] = $exception->getFile();
+			$markers['###ERROR_LINE###'] = $exception->getLine();
+		}
+
+		// Generate list of media files for the email
+		$allMedia = ($media instanceof Media) ? array($media) : $media->toArray();
+		$mediaFiles = array();
+		foreach ($allMedia as $oneMedia) {
+			// Get all properties of media record that can be outputted
+			$mediaMarkers = array();
+			foreach ($oneMedia->toArray() as $key => $value) {
+				if (!is_object($value)) {
+					$mediaMarkers[$key] = $value;
+				}
+			}
+
+			// Provide properties as markers
+			$mediaFiles[] = $this->cObj->substituteMarkerArray(
+				$config['mediafiles'],
+				$mediaMarkers,
+				'###|###',
+				TRUE
+			);
+		}
+		$markers['###MEDIAFILES###'] = implode("\n", $mediaFiles);
+
+		// Replace markers in subject and content
+		$subject = $this->cObj->substituteMarkerArray($config['subject'], $markers);
+		$message = $this->cObj->substituteMarkerArray($config['message'], $markers);
+
+		// Send email
+		return $this->objectManager->get('TYPO3\\CMS\\Core\\Mail\\MailMessage')
+			->setFrom(\TYPO3\CMS\Core\Utility\MailUtility::getSystemFrom())
+			->setTo($recipients)
+			->setSubject($subject)
+			->setBody($message)
+			->send();
+	}
+
+	/**
 	 * Fetch page TSconfig of the specified page
 	 *
 	 * @param  int         $pageUid  page
@@ -378,25 +702,21 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 	}
 
 	/**
-	 * Updates the dimension (height, width) metadata of the specified video file in FAL
-	 *
-	 * @param  \TYPO3\CMS\Core\Resource\File $file  FAL record
-	 * @return void
+	 * Validates the conversion configuration
+	 * @param  array $config  configuration
+	 * @return array          validated configuration
 	 */
-	protected function setVideoDimensions(\TYPO3\CMS\Core\Resource\File $file) {
-		// Get file for local processing
-		$localFile = $file->getForLocalProcessing(FALSE);
-
-		// Fetch media information
-		$parser = new \PHPVideoToolkit\MediaParser();
-		$fileInfo = $parser->getFileInformation($localFile);
-
-		// Update metadata of FAL record
-		$videoDimensions = array(
-			'height' => $fileInfo['video']['dimensions']['height'],
-			'width' => $fileInfo['video']['dimensions']['width']
-		);
-		$file->_updateMetaDataProperties($videoDimensions);
-		$this->metaDataRepository->update($file->getUid(), $videoDimensions);
+	protected function validateConfig(array $config) {
+		$config = array_merge($this->defaultConfig, $config);
+		foreach (array('poster', 'notification') as $key) {
+			$config[$key] = GeneralUtility::array_merge_recursive_overrule($this->defaultConfig[$key], $config[$key]);
+		}
+		foreach ($config['audio'] as &$audioConfig) {
+			$audioConfig = GeneralUtility::array_merge_recursive_overrule($this->defaultAudio, $audioConfig);
+		}
+		foreach ($config['video'] as &$videoConfig) {
+			$videoConfig = GeneralUtility::array_merge_recursive_overrule($this->defaultVideo, $videoConfig);
+		}
+		return $config;
 	}
 }
