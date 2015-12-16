@@ -28,3 +28,6 @@
 	* Documentation cleanup
 	* PHPDOC support
 	* Initial public release
+
+2015-12-16 Simon Praetorius <praetorius@wiro-consultants.de> v2.2.1
+	* Correct TYPO3 dependency setting
