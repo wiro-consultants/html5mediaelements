@@ -1,4 +1,32 @@
 <?php
+/***************************************************************
+ *
+ *  Copyright notice
+ *
+ *  (c) 2015 Simon Praetorius <praetorius@wiro-consultants.de>, WiRo Consultants
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+/**
+ * Prevent direct access
+ */
 if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
@@ -11,12 +39,10 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 		'showRecordFieldList' => 'type, sys_language_uid, l10n_parent, l10n_diffsource, hidden, title, description, source_file, auto_convert, auto_crop, auto_poster, poster, optimized_media, is_converted, is_cropped',
 	),
 	'types' => array(
-		1 => array('showitem' => 'type, sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, title, description, is_converted, is_cropped, --div--;LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.tabs.media, source_file, auto_convert;;1, poster;;2, optimized_media, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden, starttime, endtime'),
-		2 => array('showitem' => 'type, sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, title, description, is_converted, --div--;LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.tabs.media, source_file, auto_convert, poster, optimized_media, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden, starttime, endtime'),
+		1 => array('showitem' => 'type, sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, title, description, is_converted, is_cropped, --div--;LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.tabs.media, source_file, auto_convert, auto_crop, poster, auto_poster, optimized_media, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden, starttime, endtime'),
+		2 => array('showitem' => 'type, sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, title, description, is_converted, --div--;LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.tabs.media, source_file, auto_convert, optimized_media, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, hidden, starttime, endtime'),
 	),
 	'palettes' => array(
-		'1' => array('showitem' => 'auto_crop'),
-		'2' => array('showitem' => 'auto_poster')
 	),
 	'columns' => array(
 		'type' => array(
@@ -24,6 +50,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 			'label' => 'LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.type',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array(
 					array('LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.type.video', 1),
 					array('LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.type.audio', 2),
@@ -38,6 +65,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'foreign_table' => 'sys_language',
 				'foreign_table_where' => 'ORDER BY sys_language.title',
 				'items' => array(
@@ -52,6 +80,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array(
 					array('', 0),
 				),
@@ -140,9 +169,12 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 				'sourceFile',
 				array(
 					'maxitems' => 1,
-					'minitems' => 1
+					'minitems' => 1,
+					'appearance' => array(
+						'headerThumbnail' => '__UNSET'
+					)
 				),
-				''
+				'mp3,mp4,mpg,mpeg,m4a,m4v,aac,wav,aif,aiff,mov,webm,ogg,oga,ogv,wma,wmv,avi,mkv,mka,flac,opus,flv'
 			),
 		),
 		'auto_convert' => array(
@@ -166,6 +198,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 			'label' => 'LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.auto_poster',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array(
 					array('LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.auto_poster.disabled', Media::AUTO_POSTER_DISABLED),
 					array('LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_media.auto_poster.start', Media::AUTO_POSTER_START),

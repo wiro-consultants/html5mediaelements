@@ -1,4 +1,32 @@
 <?php
+/***************************************************************
+ *
+ *  Copyright notice
+ *
+ *  (c) 2015 Simon Praetorius <praetorius@wiro-consultants.de>, WiRo Consultants
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+/**
+ * Prevent direct access
+ */
 if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
@@ -24,7 +52,7 @@ $extensionName = strtolower(\TYPO3\CMS\Core\Utility\GeneralUtility::underscoredT
 $pluginName = strtolower('Mediaelement');
 $pluginSignature = $extensionName.'_'.$pluginName;
 
-$TCA['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout,select_key,pages';
+$TCA['tt_content']['types']['list']['subtypes_excludelist'][$pluginSignature] = 'layout,select_key,pages,recursive';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/FlexForms/media.xml');
@@ -47,6 +75,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 		'cruser_id' => 'cruser_id',
 		'type' => 'type',
 		'dividers2tabs' => TRUE,
+		'typeicon_column' => 'type',
 
 		'versioningWS' => 2,
 		'versioning_followPages' => TRUE,
@@ -62,7 +91,11 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_media'] = array(
 		),
 		'searchFields' => 'type,title,description,source_file,auto_convert,auto_crop,auto_poster,poster,is_converted,is_cropped,optimized_media,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/Media.php',
-		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_html5mediaelements_domain_model_media.png'
+		'typeicon_classes' => array(
+			'default' => 'mimetypes-media-video',
+			1 => 'mimetypes-media-video',
+			2 => 'mimetypes-media-audio'
+		),
 	),
 );
 
@@ -88,6 +121,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 		'versioningWS' => 2,
 		'versioning_followPages' => TRUE,
 		'hideTable' => TRUE,
+		'typeicon_column' => 'type',
 
 		'languageField' => 'sys_language_uid',
 		'transOrigPointerField' => 'l10n_parent',
@@ -100,6 +134,10 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 		),
 		'searchFields' => 'type,optimized_file,format,',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/MediaOptimized.php',
-		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'Resources/Public/Icons/tx_html5mediaelements_domain_model_mediaoptimized.png'
+		'typeicon_classes' => array(
+			'default' => 'mimetypes-media-video',
+			1 => 'mimetypes-media-video',
+			2 => 'mimetypes-media-audio'
+		),
 	),
 );

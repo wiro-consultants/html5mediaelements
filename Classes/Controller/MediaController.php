@@ -1,6 +1,4 @@
 <?php
-namespace WIRO\Html5mediaelements\Controller;
-
 /***************************************************************
  *
  *  Copyright notice
@@ -27,6 +25,11 @@ namespace WIRO\Html5mediaelements\Controller;
  ***************************************************************/
 
 /**
+ * Namespace
+ */
+namespace WIRO\Html5mediaelements\Controller;
+
+/**
  * MediaController
  */
 class MediaController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
@@ -37,12 +40,12 @@ class MediaController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 	 * @var \WIRO\Html5mediaelements\Domain\Repository\MediaRepository
 	 * @inject
 	 */
-	protected $mediaRepository = NULL;
+	protected $mediaRepository;
 
 	/**
 	 * action show
 	 *
-	 * @return void
+	 * @return mixed
 	 */
 	public function showAction() {
 		// No media provided => Skip

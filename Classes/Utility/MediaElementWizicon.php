@@ -1,7 +1,4 @@
 <?php
-
-namespace WIRO\Html5mediaelements\Utility;
-
 /***************************************************************
  *
  *  Copyright notice
@@ -27,6 +24,14 @@ namespace WIRO\Html5mediaelements\Utility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+/**
+ * Namespace
+ */
+namespace WIRO\Html5mediaelements\Utility;
+
+/**
+ * MediaElementWizicon
+ */
 class MediaElementWizicon {
 	/**
 	 * Processing the wizard items array

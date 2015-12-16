@@ -1,11 +1,4 @@
 <?php
-namespace WIRO\Html5mediaelements\CommandController;
-
-use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Backend\Utility\BackendUtility;
-use \WIRO\Html5mediaelements\Domain\Model\Media;
-use \WIRO\Html5mediaelements\Domain\Model\MediaOptimized;
-
 /***************************************************************
  *
  *  Copyright notice
@@ -32,9 +25,28 @@ use \WIRO\Html5mediaelements\Domain\Model\MediaOptimized;
  ***************************************************************/
 
 /**
+ * Namespace
+ */
+namespace WIRO\Html5mediaelements\CommandController;
+
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use \TYPO3\CMS\Core\Utility\ArrayUtility;
+use \TYPO3\CMS\Backend\Utility\BackendUtility;
+use \WIRO\Html5mediaelements\Domain\Model\Media;
+use \WIRO\Html5mediaelements\Domain\Model\MediaOptimized;
+
+/**
  * OptimizeMediaCommandController
  */
 class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\CommandController {
+	/**
+	 * Object Manager
+	 *
+	 * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
+	 * @inject
+	 */
+	protected $objectManager;
+
 	/**
 	 * Persistence Manager
 	 *
@@ -53,6 +65,7 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 
 	/**
 	 * MetaData Repository
+	 *
 	 * @var \TYPO3\CMS\Core\Resource\Index\MetaDataRepository
 	 * @inject
 	 */
@@ -68,24 +81,70 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 
 	/**
 	 * ContentObject Renderer
+	 *
 	 * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
 	 * @inject
 	 */
 	protected $cObj;
 
+	/**
+	 * Cache for page TSconfig
+	 *
+	 * @var array
+	 */
 	protected $pageTSconfigCache = array();
 
+	/**
+	 * Temporary path
+	 *
+	 * @var string
+	 */
 	protected $tempPath;
+
+	/**
+	 * Temporary path for php library
+	 *
+	 * @var string
+	 */
 	protected $tempPathPhp;
+
+	/**
+	 * Temporary path for media files
+	 *
+	 * @var string
+	 */
 	protected $tempPathFiles;
 
-	protected $defaultPoster;
+	/**
+	 * Default audio configuration
+	 *
+	 * @var array
+	 * @see initialize() initialize()
+	 * @see validateConfig() validateConfig()
+	 */
 	protected $defaultAudio;
+
+	/**
+	 * Default video configuration
+	 *
+	 * @var array
+	 * @see initialize() initialize()
+	 * @see validateConfig() validateConfig()
+	 */
 	protected $defaultVideo;
+
+	/**
+	 * Default configuration
+	 *
+	 * @var array
+	 * @see initialize() initialize()
+	 * @see validateConfig() validateConfig()
+	 */
 	protected $defaultConfig;
 
 	/**
 	 * Initializes the task
+	 *
 	 * @return void
 	 */
 	protected function initialize() {
@@ -151,6 +210,7 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 
 	/**
 	 * Perform media file optimization
+	 *
 	 * @param  string $ffmpegPath    Path to ffmpeg executable
 	 * @param  string $ffprobePath   Path to ffprobe executable
 	 * @param  string $tempPath      Temporary path
@@ -185,7 +245,7 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 			GeneralUtility::mkdir($this->tempPathFiles);
 
 			// Initialize PHP Video Toolkit
-			require \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(
+			require_once \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath(
 				'html5mediaelements',
 				'Resources/Private/Php/phpvideotoolkit/autoloader.php'
 			);
@@ -260,6 +320,8 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 			// configuration was present
 			if (!isset($config)) {
 				$config = $this->defaultConfig;
+			} else if (!isset($config['notification']['error'])) {
+				$config['notification']['error'] = $this->defaultConfig['notification']['error'];
 			}
 
 			// Send notification email with error output
@@ -274,6 +336,7 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 
 	/**
 	 * Generates a poster image from the video source file
+	 *
 	 * @param  \WIRO\Html5mediaelements\Domain\Model\Media $media   media record
 	 * @param  array                                       $config  conversion configuration for poster
 	 * @return void
@@ -607,6 +670,7 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 
 	/**
 	 * Generates a new file name based on an existing file and the format of the new name
+	 *
 	 * @param  \TYPO3\CMS\Core\Resource\File $file            original file
 	 * @param  string                        $filenameFormat  filename format with markers
 	 * @return string                                         new file name
@@ -707,20 +771,34 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 
 	/**
 	 * Validates the conversion configuration
+	 *
 	 * @param  array $config  configuration
 	 * @return array          validated configuration
 	 */
 	protected function validateConfig(array $config) {
 		$config = array_merge($this->defaultConfig, $config);
 		foreach (array('poster', 'notification') as $key) {
-			$config[$key] = GeneralUtility::array_merge_recursive_overrule($this->defaultConfig[$key], $config[$key]);
+			$config[$key] = $this->mergeConfig($config[$key], $this->defaultConfig[$key]);
 		}
 		foreach ($config['audio'] as &$audioConfig) {
-			$audioConfig = GeneralUtility::array_merge_recursive_overrule($this->defaultAudio, $audioConfig);
+			$audioConfig = $this->mergeConfig($audioConfig, $this->defaultAudio);
 		}
 		foreach ($config['video'] as &$videoConfig) {
-			$videoConfig = GeneralUtility::array_merge_recursive_overrule($this->defaultVideo, $videoConfig);
+			$videoConfig = $this->mergeConfig($videoConfig, $this->defaultVideo);
 		}
 		return $config;
+	}
+
+	/**
+	 * Merges the configuration with the default configuration for
+	 * validation purposes
+	 *
+	 * @param  array $userConfig     user configuration
+	 * @param  array $defaultConfig  default configuration
+	 * @return array                 merged configuration
+	 */
+	protected function mergeConfig($userConfig, $defaultConfig) {
+		ArrayUtility::mergeRecursiveWithOverrule($defaultConfig, $userConfig);
+		return $defaultConfig;
 	}
 }

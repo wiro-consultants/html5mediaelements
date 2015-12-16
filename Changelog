@@ -21,3 +21,10 @@
 2015-11-25 Simon Praetorius <praetorius@wiro-consultants.de> v2.1.2
 	* Code cleanup
 	* Documentation
+
+2015-12-16 Simon Praetorius <praetorius@wiro-consultants.de> v2.2.0
+	* More code cleanup
+	* TYPO3 7.6 compatibility
+	* Documentation cleanup
+	* PHPDOC support
+	* Initial public release

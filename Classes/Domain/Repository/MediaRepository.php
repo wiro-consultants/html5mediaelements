@@ -1,8 +1,4 @@
 <?php
-namespace WIRO\Html5mediaelements\Domain\Repository;
-
-use WIRO\Html5mediaelements\Domain\Model\Media;
-
 /***************************************************************
  *
  *  Copyright notice
@@ -27,6 +23,13 @@ use WIRO\Html5mediaelements\Domain\Model\Media;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+/**
+ * Namespace
+ */
+namespace WIRO\Html5mediaelements\Domain\Repository;
+
+use WIRO\Html5mediaelements\Domain\Model\Media;
 
 /**
  * The repository for Medias

@@ -1,4 +1,32 @@
 <?php
+/***************************************************************
+ *
+ *  Copyright notice
+ *
+ *  (c) 2015 Simon Praetorius <praetorius@wiro-consultants.de>, WiRo Consultants
+ *
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
+
+/**
+ * Prevent direct access
+ */
 if (!defined ('TYPO3_MODE')) {
 	die ('Access denied.');
 }
@@ -21,6 +49,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 			'label' => 'LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_mediaoptimized.type',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array(
 					array('LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_mediaoptimized.type.video', 1),
 					array('LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_mediaoptimized.type.audio', 2),
@@ -35,6 +64,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'foreign_table' => 'sys_language',
 				'foreign_table_where' => 'ORDER BY sys_language.title',
 				'items' => array(
@@ -49,6 +79,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.l18n_parent',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array(
 					array('', 0),
 				),
@@ -117,9 +148,12 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 				'optimizedFile',
 				array(
 					'maxitems' => 1,
-					'minitems' => 1
+					'minitems' => 1,
+					'appearance' => array(
+						'headerThumbnail' => '__UNSET'
+					)
 				),
-				''
+				'mp3,mp4,mpg,mpeg,m4a,m4v,aac,wav,aif,aiff,mov,webm,ogg,oga,ogv,wma,wmv,avi,mkv,mka,flac,opus,flv'
 			),
 		),
 		'format' => array(
@@ -127,6 +161,7 @@ $GLOBALS['TCA']['tx_html5mediaelements_domain_model_mediaoptimized'] = array(
 			'label' => 'LLL:EXT:html5mediaelements/Resources/Private/Language/locallang_db.xlf:tx_html5mediaelements_domain_model_mediaoptimized.format',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array(),
 				'size' => 1,
 				'maxitems' => 1,

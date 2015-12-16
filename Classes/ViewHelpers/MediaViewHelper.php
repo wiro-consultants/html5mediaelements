@@ -1,6 +1,4 @@
 <?php
-namespace WIRO\Html5mediaelements\ViewHelpers;
-
 /***************************************************************
  *
  *  Copyright notice
@@ -27,62 +25,18 @@ namespace WIRO\Html5mediaelements\ViewHelpers;
  ***************************************************************/
 
 /**
+ * Namespace
+ */
+namespace WIRO\Html5mediaelements\ViewHelpers;
+
+/**
  * MediaViewHelper
  */
 class MediaViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
 	/**
-	 * Extension key
-	 *
-	 * @var string
-	 */
-	protected $extensionKey = 'html5mediaelements';
-
-	/**
-	 * Tag name
-	 *
-	 * @var string
-	 */
-	protected $tagName = 'video';
-
-	/**
-	 * Default MIME types that should be prioritized in the output
-	 *
-	 * @var array
-	 */
-	protected $priorityFormats = array(
-		'video/mp4',
-		'video/webm',
-		'video/ogg',
-		'audio/mp4',
-		'audio/mp3',
-		'audio/mpeg',
-		'audio/ogg',
-		'application/ogg'
-	);
-
-	/**
-	 * Default MIME types that should be used as flash fallback
-	 *
-	 * @var array
-	 */
-	protected $fallbackFormats = array(
-		'video/mp4',
-		'video/x-flv',
-		'audio/mp3',
-		'audio/mpeg'
-	);
-
-	/**
-	 * Path to swf file that should be used as flash fallback
-	 *
-	 * @var string|boolean
-	 */
-	protected $flashMediaElement;
-
-	/**
 	 * Object Manager
 	 *
-	 * @var \TYPO3\CMS\Extbase\Object\ObjectManager
+	 * @var \TYPO3\CMS\Extbase\Object\ObjectManagerInterface
 	 * @inject
 	 */
 	protected $objectManager;
@@ -102,6 +56,57 @@ class MediaViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedV
 	 * @inject
 	 */
 	protected $mediaRepository;
+
+	/**
+	 * Extension key
+	 *
+	 * @var string
+	 */
+	protected $extensionKey = 'html5mediaelements';
+
+	/**
+	 * Tag name
+	 *
+	 * @var string
+	 */
+	protected $tagName = 'video';
+
+	/**
+	 * Default MIME types that should be prioritized in the output
+	 *
+	 * @var array
+	 * @see prioritizeMedia() prioritizeMedia()
+	 */
+	protected $priorityFormats = array(
+		'video/mp4',
+		'video/webm',
+		'video/ogg',
+		'audio/mp4',
+		'audio/mp3',
+		'audio/mpeg',
+		'audio/ogg',
+		'application/ogg'
+	);
+
+	/**
+	 * Default MIME types that should be used as flash fallback
+	 *
+	 * @var array
+	 * @see prioritizeMedia() prioritizeMedia()
+	 */
+	protected $fallbackFormats = array(
+		'video/mp4',
+		'video/x-flv',
+		'audio/mp3',
+		'audio/mpeg'
+	);
+
+	/**
+	 * Path to swf file that should be used as flash fallback
+	 *
+	 * @var string|boolean
+	 */
+	protected $flashMediaElement;
 
 	/**
 	 * Initializes the ViewHelper
