@@ -24,10 +24,10 @@ HTML5 Media Elements
 		en
 
 	:Description:
-		A media plugin that embeds audio and video files using HTML5 tags and Adobe Flash as a fallback. If the command line utilities "ffmpeg" and "ffprobe" are available on the server, a scheduler task can be configured to convert the source files to web-friendly media formats such as mp4, webm and mp3. The goal is to make embedding local media files as easy as uploading a video to YouTube.
+		A media plugin that embeds audio and video files using HTML5 tags and Adobe Flash as a fallback. If the command line utilities "ffmpeg" and "ffprobe" are available on the server, a scheduler task can be configured to convert the source files to web-friendly media formats such as mp4, webm and mp3. The goal is to make embedding local media files as easy as uploading a video to YouTube and embedding it into a website.
 
 	:Keywords:
-		html5, media, video, movie, audio, sound, ffmpeg, ffprobe, mediaelement.js, convert, flash, fallback, mp4, webm, mp3
+		html5, media, video, movie, audio, sound, ffmpeg, ffprobe, mediaelement.js, convert, flash, fallback, mp4, webm, mp3, embed, player
 
 	:Copyright:
 		2015

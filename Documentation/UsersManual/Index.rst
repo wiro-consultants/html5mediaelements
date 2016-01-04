@@ -22,7 +22,7 @@ To be able to embed media into your website, you first have to create a media re
 
 	Add new media record
 
-After that you have to specify some attributes of the new media record:
+After that you have to specify some attributes of the new media record (see screenshots below):
 
 - its type, either audio or video
 - a title
@@ -36,11 +36,11 @@ to trigger the conversion with the next task run. Once the conversion is finishe
 
 - Is Converted
 
-will be checked and the record will never be touched (except for poster images) by the conversion again unless that checkbox is unchecked again.
+will be checked and the record will never be touched (except for poster images) by the conversion again unless that checkbox is unchecked again (e. g. manually in the database).
 
 If you don't use ffmpeg you should specify some web-friendly media files manually:
 
-- optimized media files (e. g. 2 video files: mp4 and webm)
+- optimized media files (e. g. two video files: mp4 and webm)
 
 Videos should have a preview image that will be shown before the video is loaded. If ffmpeg is available, a preview can be created automatically, but you can specify the image manually as well.
 

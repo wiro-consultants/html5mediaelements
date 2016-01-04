@@ -42,7 +42,7 @@ Next, create a new scheduler task:
 
 - Class: *Extbase CommandController Task*
 - CommandController Command: *Html5mediaelements OptimizeMedia: optimizeMedia*
-- Don't allow parallel execution!
+- It is strongly suggested to disable parallel execution!
 
 After saving the new task, new options become available:
 
@@ -212,7 +212,7 @@ All other options correspond directly to the options of the library:
 Image options
 ^^^^^^^^^^^^^
 
-poster.
+tx_html5mediaelements.poster.
 
 * height: *ImageFormat::setVideoDimensions()*
 * width: *ImageFormat::setVideoDimensions()*
@@ -221,7 +221,7 @@ poster.
 Audio options
 ^^^^^^^^^^^^^
 
-audio.
+tx_html5mediaelements.audio.
 
 * enabled: *AudioFormat::enableAudio()* and *AudioFormat::disableAudio()*
 * codec: *AudioFormat::setAudioCodec()*
@@ -234,7 +234,7 @@ audio.
 Video options
 ^^^^^^^^^^^^^
 
-video.
+tx_html5mediaelements.video.
 
 * enabled: *VideoFormat::enableVideo()* and *VideoFormat::disableVideo()*
 * codec: *VideoFormat::setVideoCodec()*

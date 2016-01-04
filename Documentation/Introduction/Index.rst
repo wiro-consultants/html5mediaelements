@@ -9,12 +9,12 @@
 What does it do?
 ================
 
-The extension provides a user-friendly way of embedding audio and video content into a page. The goal is to make this as easy as possible without relying on external services such as YouTube or Vimeo.
+The extension provides a user-friendly way of embedding audio and video content into a page. The goal is to make this as easy as possible without relying on external services such as YouTube or Vimeo. The extension can be used both with and without a conversion task that handles different media formats automatically:
 
 Automatic conversion with ffmpeg
 --------------------------------
 
-If you want to achieve the best experience for the editor, a working "ffmpeg" environment is recommended on the webserver. With this prerequisite all the editor needs is a media file compatible to your ffmpeg installation. After uploading and referencing the media file, a converter task kicks in and converts the media file to web-friendly formats such as mp4, webm or mp3. The task also creates a poster image for video files based on the original video.
+If you want to achieve the best experience for the editor, a working "ffmpeg" environment is recommended on the webserver. With this prerequisite all the editor needs is a media file compatible to your ffmpeg installation. After uploading and referencing the media file, a converter task kicks in and converts the media file to web-friendly formats such as mp4, webm and mp3. The task also creates a poster image for video files based on the original video.
 
 When the conversion has finished, a plugin takes care of embedded the media file into the page using the appropriate HTML5 tags while providing a fallback for older browsers.
 
@@ -45,7 +45,7 @@ All information about a media file, including the file itself as well as its web
 	:width: 658px
 	:alt: Media Record
 
-	Media record with a wmv file as source, a poster image generated with ffmpeg and 3 web-friendly versions, also generated with ffmpeg
+	Media record with a wmv file as source, a poster image generated with ffmpeg and three web-friendly versions, also generated with ffmpeg
 
 Conversion task
 ---------------
