@@ -214,8 +214,8 @@ class OptimizeMediaCommandController extends \TYPO3\CMS\Extbase\Mvc\Controller\C
 	 * @param  string $ffmpegPath    Path to ffmpeg executable
 	 * @param  string $ffprobePath   Path to ffprobe executable
 	 * @param  string $tempPath      Temporary path
-	 * @param  string $errorEmail    Notification recipient(s) for errors
-	 * @param  string $successEmail  Notification recipient(s) for success
+	 * @param  string $errorEmail    Notification recipient(s) for errors (optional)
+	 * @param  string $successEmail  Notification recipient(s) for success (optional)
 	 * @return string                Task status
 	 */
 	public function optimizeMediaCommand(
